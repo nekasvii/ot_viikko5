@@ -1,22 +1,28 @@
-// Teht 5.1 blogilistan frontend step1 OK 
-// frontendiin kirjautumisen mahdollistava toiminnallisuus
-// Jos käyttäjä ei ole kirjautunut, sivulla näytetään pelkästään kirjautumislomake
-// Kirjautuneelle käyttäjälle näytetään kirjautuneen käyttäjän nimi sekä blogien lista
-// Teht 5.2 blogilistan frontend step2 OK
-// kirjautumisesta "pysyvä" local storagen avulla
-// mahdollisuus uloskirjautumiseen
-// Teht 5.3 blogilistan frontend step3 OK
-// kirjautunut käyttäjä voi luoda uusia blogeja
-// tehty muutoksia myös bachendin middlewareen tokenin käsittelyyn liittyen
-// Teht 5.4 blogilistan frontend step4 OK
-// notifikaatiot, jotka kertovat sovelluksen yläosassa onnistuneista ja epäonnistuneista toimenpiteistä
+// Teht 5.5 blogilistan frontend step5
+// blogin luominen new note -nappulan takana
+// Teht 5.6 blogilistan frontend step6
+// blogin luominen omaan komponenttiinsa
+// Teht 5.7 blogilistan frontend step7
+// yksittäiselle blogille nappi, jonka avulla voi kontrolloida, 
+// näytetäänkö kaikki blogiin liittyvät tiedot
+// Uusi napin klikkaus pienentää näkymän
+// Napin like ei tässä vaiheessa tarvitse tehdä mitään
+// Teht 5.8 blogilistan frontend step8
+// uusi blogi, ei blogin lisääjän nimeä näytetä blogin tarkempien tietojen joukossa -> korjaa
+// Teht 5.9 blogilistan frontend step9
+// like-painikkeen toiminnallisuus
+// like lisätään backendiin blogin yksilöivään urliin tapahtuvalla PUT-pyynnöllä
+// Teht 5.10 blogilistan frontend step10
+// sovellus näyttää blogit likejen mukaisessa suuruusjärjestyksessä
+// Teht 5.11 blogilistan frontend step11
+// nappi blogin poistamiselle
 
 import { useState, useEffect } from 'react'
 import Blog from './components/Blog'
 import Notification from './components/Notification'
 import Error from './components/error'
 import blogService from './services/blogs'
-import loginService from './services/login'
+import LoginForm from './components/LoginForm'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
@@ -42,57 +48,23 @@ const App = () => {
     }  
   }, [])
 
-  const handleLogin = async (event) => { // käsitellään sisäänkirjautuminen
-
-    event.preventDefault()
-    
-    try {      
-      const user = await loginService.login({        
-        username, password,      
-      })      
-
-      window.localStorage.setItem(  // käyttäjän tiedot local storageen
-        'loggedBlogappUser', JSON.stringify(user)      
-      ) 
-
-      setUser(user)      
-      setUsername('')      
-      setPassword('')  
-      setNotificationMessage(user.name + ' signed in')
-      setTimeout(() => {
-        setNotificationMessage(null)
-      }, 5000)  
-    } catch (exception) {      
-      setErrorMessage('wrong credentials')      
-      setTimeout(() => {        
-        setErrorMessage(null)      
-      }, 5000)    
-    }  
+  // onnistuneen kirjautumisen handle
+  const handleLoginSuccess = (user) => {
+    setUser(user)
+    blogService.setToken(user.token)
+    setNotificationMessage(user.name + ' signed in')
+    setTimeout(() => {
+      setNotificationMessage(null)
+    }, 5000)
   }
 
-  const loginForm = () => (
-    <form onSubmit={handleLogin}>
-      <div>
-        username
-          <input
-          type="text"
-          value={username}
-          name="Username"
-          onChange={({ target }) => setUsername(target.value)}
-        />
-      </div>
-      <div>
-        password
-          <input
-          type="password"
-          value={password}
-          name="Password"
-          onChange={({ target }) => setPassword(target.value)}
-        />
-      </div>
-      <button type="submit">login</button>
-    </form>      
-  )
+  // epäonnistuneen kirjautumisen handle
+  const handleLoginError = (message) => {
+    setErrorMessage(message)
+    setTimeout(() => {
+      setErrorMessage(null)
+    }, 5000)
+  }
 
   const handleLogout = () => { // käsitellään uloskirjautuminen
     window.localStorage.removeItem('loggedBlogappUser');
@@ -173,8 +145,9 @@ const App = () => {
       <Notification message={notificationMessage} />
       <Error message={errorMessage} />
 
-      {!user && loginForm()}      
-      {user && <div>
+      {!user && <LoginForm onLogin={handleLoginSuccess} onError={handleLoginError} />}    
+      {user && 
+      <div>
        <p>{user.name} logged in <button onClick={handleLogout}>logout</button></p>
        {user && blogForm()} 
       </div>
