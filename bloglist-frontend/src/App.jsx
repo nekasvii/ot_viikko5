@@ -1,6 +1,6 @@
-// Teht 5.5 blogilistan frontend step5
+// Teht 5.5 blogilistan frontend step5 OK
 // blogin luominen new note -nappulan takana
-// Teht 5.6 blogilistan frontend step6
+// Teht 5.6 blogilistan frontend step6 OK
 // blogin luominen omaan komponenttiinsa
 // Teht 5.7 blogilistan frontend step7
 // yksittäiselle blogille nappi, jonka avulla voi kontrolloida, 
@@ -27,12 +27,10 @@ import AddBlogForm from './components/AddBlogForm'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
-  const [username, setUsername] = useState('')   
-  const [password, setPassword] = useState('') 
   const [user, setUser] = useState(null)
   const [errorMessage, setErrorMessage] = useState(null)
   const [notificationMessage, setNotificationMessage] = useState(null)
-  const [newBlog, setNewBlog] = useState({ title: '', author: '', url: '', likes: 0 })
+  const [blogFormVisible, setBlogFormVisible] = useState(false)
 
   useEffect(() => {
     blogService.getAll().then(blogs =>
@@ -91,6 +89,27 @@ const App = () => {
     }, 5000)
   }
 
+  // blogin lisääminen create-nappulan takana
+  const blogForm = () => {
+    const hideWhenVisible = { display: blogFormVisible ? 'none' : '' }
+    const showWhenVisible = { display: blogFormVisible ? '' : 'none' }
+
+    return (
+      <div>
+        <div style={hideWhenVisible}>
+          <button onClick={() => setBlogFormVisible(true)}>create new blog</button>
+        </div>
+        <div style={showWhenVisible}>
+          <AddBlogForm
+            onBlogAdded={handleBlogAdded}
+            onError={handleBlogError}
+          />
+          <button onClick={() => setBlogFormVisible(false)}>cancel</button>
+        </div>
+      </div>
+    )
+  }
+
   return (
     <div>
       <h2>blogs</h2>
@@ -101,7 +120,7 @@ const App = () => {
       {user && 
       <div>
        <p>{user.name} logged in <button onClick={handleLogout}>logout</button></p>
-       <AddBlogForm onBlogAdded={handleBlogAdded} onError={handleBlogError} />
+       {blogForm()}
       </div>
       } 
       <br />
