@@ -23,6 +23,7 @@ import Notification from './components/Notification'
 import Error from './components/error'
 import blogService from './services/blogs'
 import LoginForm from './components/LoginForm'
+import AddBlogForm from './components/AddBlogForm'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
@@ -75,69 +76,20 @@ const App = () => {
       }, 5000)
   }
 
-  const handleBlogChange = (event) => {
-    setNewBlog({ ...newBlog, [event.target.name]: event.target.value })
+  const handleBlogAdded = (savedBlog) => {
+    setBlogs(blogs.concat(savedBlog))
+    setNotificationMessage('Blog added')
+    setTimeout(() => {
+      setNotificationMessage(null)
+    }, 5000)
   }
 
-  const addBlog = async (event) => { // lisää uuden blogimerkinnän
-    event.preventDefault();
-    try {
-      const savedBlog = await blogService.create(newBlog)
-      setBlogs(blogs.concat(savedBlog))
-      setNewBlog({ title: '', author: '', url: '', likes: 0 })
-      setNotificationMessage('Blog added')
-      setTimeout(() => {
-        setNotificationMessage(null)
-      }, 5000)
-    } catch (exception) {
-      setErrorMessage('creating a new blog failed')
-      setTimeout(() => {        
-        setErrorMessage(null)      
-      }, 5000)   
-    }
+  const handleBlogError = (message) => {
+    setErrorMessage(message)
+    setTimeout(() => {
+      setErrorMessage(null)
+    }, 5000)
   }
-
-  const blogForm = () => (
-    <form onSubmit={addBlog}>
-      <div>
-        title
-        <input
-          type="text"
-          value={newBlog.title}
-          name="title"
-          onChange={handleBlogChange}
-        />
-      </div>
-      <div>
-        author
-        <input
-          type="text"
-          value={newBlog.author}
-          name="author"
-          onChange={handleBlogChange}
-        />
-      </div>
-      <div>
-        url
-        <input
-          type="text"
-          value={newBlog.url}
-          name="url"
-          onChange={handleBlogChange}
-        />
-      </div>
-      <div>
-        likes
-        <input
-          type="number"
-          value={newBlog.likes}
-          name="likes"
-          onChange={handleBlogChange}
-        />
-      </div>
-      <button type="submit">add blog</button>
-    </form>
-  )
 
   return (
     <div>
@@ -149,7 +101,7 @@ const App = () => {
       {user && 
       <div>
        <p>{user.name} logged in <button onClick={handleLogout}>logout</button></p>
-       {user && blogForm()} 
+       <AddBlogForm onBlogAdded={handleBlogAdded} onError={handleBlogError} />
       </div>
       } 
       <br />
