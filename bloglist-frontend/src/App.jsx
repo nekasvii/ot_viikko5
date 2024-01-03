@@ -12,7 +12,7 @@
 // Teht 5.9 blogilistan frontend step9
 // like-painikkeen toiminnallisuus
 // like lisätään backendiin blogin yksilöivään urliin tapahtuvalla PUT-pyynnöllä
-// Teht 5.10 blogilistan frontend step10
+// Teht 5.10 blogilistan frontend step10 OK
 // sovellus näyttää blogit likejen mukaisessa suuruusjärjestyksessä
 // Teht 5.11 blogilistan frontend step11
 // nappi blogin poistamiselle
@@ -110,6 +110,9 @@ const App = () => {
     )
   }
 
+  // blogien sorttaus liketyimmästä alkaen
+  const blogsSortedByLikes = blogs.sort((a, b) => b.likes - a.likes)
+
   return (
     <div>
       <h2>blogs</h2>
@@ -124,7 +127,7 @@ const App = () => {
       </div>
       } 
       <br />
-      {blogs.map(blog =>
+      {blogsSortedByLikes.map(blog =>
         <Blog key={blog.id} blog={blog} />
       )}
     </div>
