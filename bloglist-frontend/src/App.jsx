@@ -2,12 +2,12 @@
 // blogin luominen new note -nappulan takana
 // Teht 5.6 blogilistan frontend step6 OK
 // blogin luominen omaan komponenttiinsa
-// Teht 5.7 blogilistan frontend step7
+// Teht 5.7 blogilistan frontend step7 OK
 // yksittäiselle blogille nappi, jonka avulla voi kontrolloida, 
 // näytetäänkö kaikki blogiin liittyvät tiedot
 // Uusi napin klikkaus pienentää näkymän
 // Napin like ei tässä vaiheessa tarvitse tehdä mitään
-// Teht 5.8 blogilistan frontend step8
+// Teht 5.8 blogilistan frontend step8 OK
 // uusi blogi, ei blogin lisääjän nimeä näytetä blogin tarkempien tietojen joukossa -> korjaa
 // Teht 5.9 blogilistan frontend step9
 // like-painikkeen toiminnallisuus
@@ -97,7 +97,7 @@ const App = () => {
     return (
       <div>
         <div style={hideWhenVisible}>
-          <button onClick={() => setBlogFormVisible(true)}>create new blog</button>
+          <button onClick={() => setBlogFormVisible(true)}>create</button>
         </div>
         <div style={showWhenVisible}>
           <AddBlogForm
