@@ -1,7 +1,10 @@
 // moduuli näyttää hallinnoi blogien listausta
 import { useState } from 'react'
+import blogService from '../services/blogs'
+import Error from './error'
+import Notification from './Notification'
 
-const Blog = ({ blog }) => {
+const Blog = ({ blog, onDelete }) => {
   const blogStyle = {
     paddingTop: 10,
     paddingLeft: 2,
@@ -11,6 +14,8 @@ const Blog = ({ blog }) => {
   }
 
   const [detailsVisible, setDetailsVisible] = useState(false)
+  const [errorMessage, setErrorMessage] = useState(null)
+  const [notificationMessage, setNotificationMessage] = useState(null)
 
   const hideWhenVisible = { display: detailsVisible ? 'none' : '' }
   const showWhenVisible = { display: detailsVisible ? '' : 'none' }
@@ -19,9 +24,31 @@ const Blog = ({ blog }) => {
     setDetailsVisible(!detailsVisible)
   }
 
+  const handleDelete = async () => {
+    const confirmMessage = `Remove blog ${blog.title} by ${blog.author}`;
+    if (window.confirm(confirmMessage)) {
+      try {
+        await blogService.remove(blog.id)
+        onDelete(blog.id)
+        setNotificationMessage('the blog has been deleted')
+        setTimeout(() => {
+        setNotificationMessage(null)
+        }, 5000)
+      } catch (exception) {
+        setErrorMessage('unable to delete the blog: ')
+        setTimeout(() => {
+        setErrorMessage(null)
+    }, 5000)
+      }
+    }
+  }
+
   return (
     <div>
       <div style={blogStyle}>
+        <Notification message={notificationMessage} />
+        <Error message={errorMessage} />
+
         <div style={hideWhenVisible}>
           {blog.title} {blog.author} <button onClick={toggleVisibility}>view</button>
         </div>
@@ -29,7 +56,7 @@ const Blog = ({ blog }) => {
           <p>{blog.title} {blog.author} <button onClick={toggleVisibility}>hide</button></p>
           <p>{blog.url}</p>
           <p>likes {blog.likes}</p>
-          
+          <button onClick={handleDelete}>delete</button>
         </div>
       </div>
     </div>
