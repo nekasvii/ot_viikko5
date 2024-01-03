@@ -5,6 +5,11 @@
 // Teht 5.2 blogilistan frontend step2 OK
 // kirjautumisesta "pysyvä" local storagen avulla
 // mahdollisuus uloskirjautumiseen
+// Teht 5.3 blogilistan frontend step3 
+// kirjautunut käyttäjä voi luoda uusia blogeja OK
+// tehty muutoksia myös bachendin middlewareen tokenin käsittelyyn liittyen
+// Teht 5.4 blogilistan frontend step4
+// notifikaatiot, jotka kertovat sovelluksen yläosassa onnistuneista ja epäonnistuneista toimenpiteistä
 
 import { useState, useEffect } from 'react'
 import Blog from './components/Blog'
@@ -18,6 +23,7 @@ const App = () => {
   const [password, setPassword] = useState('') 
   const [user, setUser] = useState(null)
   const [errorMessage, setErrorMessage] = useState(null)
+  const [newBlog, setNewBlog] = useState({ title: '', author: '', url: '', likes: 0 })
 
   useEffect(() => {
     blogService.getAll().then(blogs =>
@@ -30,7 +36,7 @@ const App = () => {
     if (loggedUserJSON) {      
       const user = JSON.parse(loggedUserJSON)      
       setUser(user)      
-      // noteService.setToken(user.token)    
+      blogService.setToken(user.token)    
     }  
   }, [])
 
@@ -58,11 +64,6 @@ const App = () => {
     }  
   }
 
-  const handleLogout = () => { // käsitellään uloskirjautuminen
-    window.localStorage.removeItem('loggedBlogappUser');
-    setUser(null)
-  }
-
   const loginForm = () => (
     <form onSubmit={handleLogin}>
       <div>
@@ -87,6 +88,68 @@ const App = () => {
     </form>      
   )
 
+  const handleLogout = () => { // käsitellään uloskirjautuminen
+    window.localStorage.removeItem('loggedBlogappUser');
+    setUser(null)
+  }
+
+  const handleBlogChange = (event) => {
+    setNewBlog({ ...newBlog, [event.target.name]: event.target.value })
+  }
+
+  const addBlog = async (event) => { // lisää uuden blogimerkinnän
+    event.preventDefault();
+    try {
+      const savedBlog = await blogService.create(newBlog)
+      setBlogs(blogs.concat(savedBlog))
+      setNewBlog({ title: '', author: '', url: '', likes: 0 })
+    } catch (exception) {
+      setErrorMessage('creating a new blog failed')
+    }
+  }
+
+  const blogForm = () => (
+    <form onSubmit={addBlog}>
+      <div>
+        title
+        <input
+          type="text"
+          value={newBlog.title}
+          name="title"
+          onChange={handleBlogChange}
+        />
+      </div>
+      <div>
+        author
+        <input
+          type="text"
+          value={newBlog.author}
+          name="author"
+          onChange={handleBlogChange}
+        />
+      </div>
+      <div>
+        url
+        <input
+          type="text"
+          value={newBlog.url}
+          name="url"
+          onChange={handleBlogChange}
+        />
+      </div>
+      <div>
+        likes
+        <input
+          type="number"
+          value={newBlog.likes}
+          name="likes"
+          onChange={handleBlogChange}
+        />
+      </div>
+      <button type="submit">add blog</button>
+    </form>
+  )
+
   return (
     <div>
       <h2>blogs</h2>
@@ -95,9 +158,9 @@ const App = () => {
       {!user && loginForm()}      
       {user && <div>
        <p>{user.name} logged in <button onClick={handleLogout}>logout</button></p>
-       
+       {user && blogForm()} <br />
       </div>
-    } 
+      } 
 
       {blogs.map(blog =>
         <Blog key={blog.id} blog={blog} />
