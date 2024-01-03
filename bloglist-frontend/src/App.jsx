@@ -2,6 +2,9 @@
 // frontendiin kirjautumisen mahdollistava toiminnallisuus
 // Jos käyttäjä ei ole kirjautunut, sivulla näytetään pelkästään kirjautumislomake
 // Kirjautuneelle käyttäjälle näytetään kirjautuneen käyttäjän nimi sekä blogien lista
+// Teht 5.2 blogilistan frontend step2 OK
+// kirjautumisesta "pysyvä" local storagen avulla
+// mahdollisuus uloskirjautumiseen
 
 import { useState, useEffect } from 'react'
 import Blog from './components/Blog'
@@ -22,7 +25,16 @@ const App = () => {
     )  
   }, [])
 
-  const handleLogin = async (event) => {
+  useEffect(() => {  // tarkistetaan local storagen tila, josko käyttäjä on kirjautuneena 
+    const loggedUserJSON = window.localStorage.getItem('loggedBlogappUser')    
+    if (loggedUserJSON) {      
+      const user = JSON.parse(loggedUserJSON)      
+      setUser(user)      
+      // noteService.setToken(user.token)    
+    }  
+  }, [])
+
+  const handleLogin = async (event) => { // käsitellään sisäänkirjautuminen
 
     event.preventDefault()
     
@@ -30,6 +42,11 @@ const App = () => {
       const user = await loginService.login({        
         username, password,      
       })      
+
+      window.localStorage.setItem(  // käyttäjän tiedot local storageen
+        'loggedBlogappUser', JSON.stringify(user)      
+      ) 
+
       setUser(user)      
       setUsername('')      
       setPassword('')    
@@ -39,6 +56,11 @@ const App = () => {
         setErrorMessage(null)      
       }, 5000)    
     }  
+  }
+
+  const handleLogout = () => { // käsitellään uloskirjautuminen
+    window.localStorage.removeItem('loggedBlogappUser');
+    setUser(null)
   }
 
   const loginForm = () => (
@@ -72,7 +94,8 @@ const App = () => {
 
       {!user && loginForm()}      
       {user && <div>
-       <p>{user.name} logged in</p>
+       <p>{user.name} logged in <button onClick={handleLogout}>logout</button></p>
+       
       </div>
     } 
 

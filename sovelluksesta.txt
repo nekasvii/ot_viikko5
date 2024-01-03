@@ -5,4 +5,8 @@ const baseUrl = 'http://localhost:3003/api/blogs' || '/api/blogs'
 
 axios kirjaston lataaminen: npm install axios
 
+virheilmot Notification kautta
 
+käyttäjän tiedot voi tallentaa local storageen, jotta käyttäjä pysyy kirjautuneena
+chromen konsolissa local storagen sisältö: window.localStorage
+-> sovellus laitettava myös tarkistamaan local storagen tilan
