@@ -10,3 +10,6 @@ virheilmot Notification kautta
 käyttäjän tiedot voi tallentaa local storageen, jotta käyttäjä pysyy kirjautuneena
 chromen konsolissa local storagen sisältö: window.localStorage
 -> sovellus laitettava myös tarkistamaan local storagen tilan
+
+
+eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkvDpMOkcmlqw6QiLCJpZCI6IjY1OTU0OTI4OTczODNkNDY1NDEyMDFmYiIsImlhdCI6MTcwNDMwMjEzM30.B_q6GLVoX4TReRsPfO6IjHNcIlvqt4vy9NrZfWvoItc

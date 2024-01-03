@@ -35,11 +35,32 @@ const Blog = ({ blog, onDelete }) => {
         setNotificationMessage(null)
         }, 5000)
       } catch (exception) {
-        setErrorMessage('unable to delete the blog: ')
+        setErrorMessage('unable to delete the blog')
         setTimeout(() => {
         setErrorMessage(null)
     }, 5000)
       }
+    }
+  } 
+
+  const handleLike = async () => {
+    const updatedBlog = {
+      ...blog,
+      likes: blog.likes + 1
+    }
+
+    try {
+      const returnedBlog = await blogService.update(blog.id, updatedBlog)
+      onUpdate(returnedBlog)
+      setNotificationMessage('liked')
+      setTimeout(() => {
+      setNotificationMessage(null)
+      }, 5000)
+    } catch (exception) {
+      setErrorMessage('like not working')
+      setTimeout(() => {
+      setErrorMessage(null)
+      }, 5000)
     }
   }
 
@@ -55,7 +76,7 @@ const Blog = ({ blog, onDelete }) => {
         <div style={showWhenVisible}>
           <p>{blog.title} {blog.author} <button onClick={toggleVisibility}>hide</button></p>
           <p>{blog.url}</p>
-          <p>likes {blog.likes}</p>
+          <p>likes {blog.likes} <button onClick={handleLike}>like</button></p>
           <button onClick={handleDelete}>delete</button>
         </div>
       </div>
