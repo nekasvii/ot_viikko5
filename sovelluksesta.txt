@@ -1,0 +1,8 @@
+alkuvalmisteluja
+
+urlin kanssa ongelmaa. ratkottu: 
+const baseUrl = 'http://localhost:3003/api/blogs' || '/api/blogs'
+
+axios kirjaston lataaminen: npm install axios
+
+
