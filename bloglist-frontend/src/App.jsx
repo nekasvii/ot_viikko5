@@ -5,15 +5,16 @@
 // Teht 5.2 blogilistan frontend step2 OK
 // kirjautumisesta "pysyvä" local storagen avulla
 // mahdollisuus uloskirjautumiseen
-// Teht 5.3 blogilistan frontend step3 
-// kirjautunut käyttäjä voi luoda uusia blogeja OK
+// Teht 5.3 blogilistan frontend step3 OK
+// kirjautunut käyttäjä voi luoda uusia blogeja
 // tehty muutoksia myös bachendin middlewareen tokenin käsittelyyn liittyen
-// Teht 5.4 blogilistan frontend step4
+// Teht 5.4 blogilistan frontend step4 OK
 // notifikaatiot, jotka kertovat sovelluksen yläosassa onnistuneista ja epäonnistuneista toimenpiteistä
 
 import { useState, useEffect } from 'react'
 import Blog from './components/Blog'
 import Notification from './components/Notification'
+import Error from './components/error'
 import blogService from './services/blogs'
 import loginService from './services/login'
 
@@ -23,6 +24,7 @@ const App = () => {
   const [password, setPassword] = useState('') 
   const [user, setUser] = useState(null)
   const [errorMessage, setErrorMessage] = useState(null)
+  const [notificationMessage, setNotificationMessage] = useState(null)
   const [newBlog, setNewBlog] = useState({ title: '', author: '', url: '', likes: 0 })
 
   useEffect(() => {
@@ -55,7 +57,11 @@ const App = () => {
 
       setUser(user)      
       setUsername('')      
-      setPassword('')    
+      setPassword('')  
+      setNotificationMessage(user.name + ' signed in')
+      setTimeout(() => {
+        setNotificationMessage(null)
+      }, 5000)  
     } catch (exception) {      
       setErrorMessage('wrong credentials')      
       setTimeout(() => {        
@@ -91,6 +97,10 @@ const App = () => {
   const handleLogout = () => { // käsitellään uloskirjautuminen
     window.localStorage.removeItem('loggedBlogappUser');
     setUser(null)
+    setNotificationMessage(user.name + ' signed out')
+      setTimeout(() => {
+        setNotificationMessage(null)
+      }, 5000)
   }
 
   const handleBlogChange = (event) => {
@@ -103,8 +113,15 @@ const App = () => {
       const savedBlog = await blogService.create(newBlog)
       setBlogs(blogs.concat(savedBlog))
       setNewBlog({ title: '', author: '', url: '', likes: 0 })
+      setNotificationMessage('Blog added')
+      setTimeout(() => {
+        setNotificationMessage(null)
+      }, 5000)
     } catch (exception) {
       setErrorMessage('creating a new blog failed')
+      setTimeout(() => {        
+        setErrorMessage(null)      
+      }, 5000)   
     }
   }
 
@@ -153,15 +170,16 @@ const App = () => {
   return (
     <div>
       <h2>blogs</h2>
-      <Notification message={errorMessage} />
+      <Notification message={notificationMessage} />
+      <Error message={errorMessage} />
 
       {!user && loginForm()}      
       {user && <div>
        <p>{user.name} logged in <button onClick={handleLogout}>logout</button></p>
-       {user && blogForm()} <br />
+       {user && blogForm()} 
       </div>
       } 
-
+      <br />
       {blogs.map(blog =>
         <Blog key={blog.id} blog={blog} />
       )}
