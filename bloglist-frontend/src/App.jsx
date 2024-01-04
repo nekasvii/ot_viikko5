@@ -16,6 +16,10 @@
 // sovellus näyttää blogit likejen mukaisessa suuruusjärjestyksessä
 // Teht 5.11 blogilistan frontend step11 OK
 // nappi blogin poistamiselle
+// Teht 5.12 blogilistan frontend step12 EI TEHTY
+// joillekin sovelluksesi komponenteille PropTypet
+// projektiin käyttöön ESLint
+// Korjaataan kaikki lint-virheet
 
 import { useState, useEffect } from 'react'
 import Blog from './components/Blog'
