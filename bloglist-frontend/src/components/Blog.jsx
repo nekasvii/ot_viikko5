@@ -34,8 +34,8 @@ const Blog = ({ blog, onDelete }) => {
         setTimeout(() => {
         setNotificationMessage(null)
         }, 5000)
-      } catch (exception) {
-        setErrorMessage('unable to delete the blog')
+      } catch (exception) { // oikein: id
+        setErrorMessage('unable to delete the blog' + blog.userId)
         setTimeout(() => {
         setErrorMessage(null)
     }, 5000)

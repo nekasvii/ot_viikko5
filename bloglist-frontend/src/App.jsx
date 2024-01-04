@@ -9,7 +9,7 @@
 // Napin like ei tässä vaiheessa tarvitse tehdä mitään
 // Teht 5.8 blogilistan frontend step8 OK
 // uusi blogi, ei blogin lisääjän nimeä näytetä blogin tarkempien tietojen joukossa -> korjaa
-// Teht 5.9 blogilistan frontend step9 
+// Teht 5.9 blogilistan frontend step9 OK
 // like-painikkeen toiminnallisuus
 // like lisätään backendiin blogin yksilöivään urliin tapahtuvalla PUT-pyynnöllä
 // Teht 5.10 blogilistan frontend step10 OK
@@ -89,6 +89,10 @@ const App = () => {
     }, 5000)
   }
 
+  const handleBlogDelete = (id) => {
+    setBlogs(blogs.filter(blog => blog.id !== id))
+  }
+
   // blogin lisääminen create-nappulan takana
   const blogForm = () => {
     const hideWhenVisible = { display: blogFormVisible ? 'none' : '' }
@@ -132,7 +136,7 @@ const App = () => {
       } 
       <br />
       {blogsSortedByLikes.map(blog =>
-        <Blog key={blog.id} blog={blog} onUpdate={handleBlogUpdate} />
+        <Blog key={blog.id} blog={blog} onUpdate={handleBlogUpdate} onDelete={handleBlogDelete} />
       )}
     </div>
   )
