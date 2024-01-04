@@ -66,7 +66,7 @@ const Blog = ({ blog, onDelete, user }) => {
   }
 
   return (
-    <div>
+    <div className="blog">
       <div style={blogStyle}>
         <Notification message={notificationMessage} />
         <Error message={errorMessage} />

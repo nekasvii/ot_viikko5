@@ -11,5 +11,31 @@ käyttäjän tiedot voi tallentaa local storageen, jotta käyttäjä pysyy kirja
 chromen konsolissa local storagen sisältö: window.localStorage
 -> sovellus laitettava myös tarkistamaan local storagen tilan
 
+testaaminen frontendissä:
+jest-kirjasto: 
+npm install --save-dev jest
+React Testing Library jest-domilla: 
+npm install --save-dev @testing-library/react @testing-library/jest-dom jest-environment-jsdom @babel/preset-env @babel/preset-react
 
-eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkvDpMOkcmlqw6QiLCJpZCI6IjY1OTU0OTI4OTczODNkNDY1NDEyMDFmYiIsImlhdCI6MTcwNDMwMjEzM30.B_q6GLVoX4TReRsPfO6IjHNcIlvqt4vy9NrZfWvoItc
+package.jasoniin:
+  "scripts": {
+    // ...
+    "test": "jest"
+  }
+  // ...
+  "jest": {
+    "testEnvironment": "jsdom",
+    "moduleNameMapper": {
+      "^.+\\.svg$": "jest-svg-transformer",
+      "^.+\\.(css|less|scss)$": "identity-obj-proxy"
+    }
+  }
+
+luo tiedosto .babelrc:
+{
+  "presets": [
+    "@babel/preset-env",
+    ["@babel/preset-react", { "runtime": "automatic" }]
+  ]
+}
+
