@@ -28,6 +28,7 @@ const CreateBlogForm = ({ onBlogAdded, onError }) => {
           type="text"
           value={newBlog.title}
           name="title"
+          id="title"
           onChange={handleBlogChange}
         />
       </div>
@@ -37,6 +38,7 @@ const CreateBlogForm = ({ onBlogAdded, onError }) => {
           type="text"
           value={newBlog.author}
           name="author"
+          id="author"
           onChange={handleBlogChange}
         />
       </div>
@@ -46,6 +48,7 @@ const CreateBlogForm = ({ onBlogAdded, onError }) => {
           type="text"
           value={newBlog.url}
           name="url"
+          id="url"
           onChange={handleBlogChange}
         />
       </div>
@@ -55,6 +58,7 @@ const CreateBlogForm = ({ onBlogAdded, onError }) => {
           type="number"
           value={newBlog.likes}
           name="likes"
+          id="likes"
           onChange={handleBlogChange}
         />
       </div>
