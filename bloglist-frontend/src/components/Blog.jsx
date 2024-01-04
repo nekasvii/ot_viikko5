@@ -4,7 +4,7 @@ import blogService from '../services/blogs'
 import Error from './error'
 import Notification from './Notification'
 
-const Blog = ({ blog, onDelete }) => {
+const Blog = ({ blog, onDelete, user }) => {
   const blogStyle = {
     paddingTop: 10,
     paddingLeft: 2,
@@ -17,6 +17,7 @@ const Blog = ({ blog, onDelete }) => {
   const [errorMessage, setErrorMessage] = useState(null)
   const [notificationMessage, setNotificationMessage] = useState(null)
 
+  const showDeleteButton = user && blog.user && user.id === blog.user.id
   const hideWhenVisible = { display: detailsVisible ? 'none' : '' }
   const showWhenVisible = { display: detailsVisible ? '' : 'none' }
 
@@ -77,7 +78,7 @@ const Blog = ({ blog, onDelete }) => {
           <p>{blog.title} {blog.author} <button onClick={toggleVisibility}>hide</button></p>
           <p>{blog.url}</p>
           <p>likes {blog.likes} <button onClick={handleLike}>like</button></p>
-          <button onClick={handleDelete}>delete</button>
+          {showDeleteButton && (<button onClick={handleDelete}>delete</button>)}
         </div>
       </div>
     </div>

@@ -136,7 +136,7 @@ const App = () => {
       } 
       <br />
       {blogsSortedByLikes.map(blog =>
-        <Blog key={blog.id} blog={blog} onUpdate={handleBlogUpdate} onDelete={handleBlogDelete} />
+        <Blog key={blog.id} blog={blog} onUpdate={handleBlogUpdate} onDelete={handleBlogDelete} user={user} />
       )}
     </div>
   )
