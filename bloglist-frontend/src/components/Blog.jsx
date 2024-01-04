@@ -17,7 +17,7 @@ const Blog = ({ blog, onDelete, user }) => {
   const [errorMessage, setErrorMessage] = useState(null)
   const [notificationMessage, setNotificationMessage] = useState(null)
 
-  const showDeleteButton = user && blog.user && user.id === blog.user.id
+  const showDeleteButton = user && blog.user && user.id === blog.userId
   const hideWhenVisible = { display: detailsVisible ? 'none' : '' }
   const showWhenVisible = { display: detailsVisible ? '' : 'none' }
 
@@ -79,6 +79,7 @@ const Blog = ({ blog, onDelete, user }) => {
           <p>{blog.url}</p>
           <p>likes {blog.likes} <button onClick={handleLike}>like</button></p>
           {showDeleteButton && (<button onClick={handleDelete}>delete</button>)}
+          {user && <p>Created by: {user.name}</p>}
         </div>
       </div>
     </div>

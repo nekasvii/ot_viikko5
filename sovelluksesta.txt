@@ -39,3 +39,6 @@ luo tiedosto .babelrc:
   ]
 }
 
+testaillessa nappuloiden painelua, apukirjasto user-event:
+npm install --save-dev @testing-library/user-event
+
